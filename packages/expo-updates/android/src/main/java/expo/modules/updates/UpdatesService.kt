@@ -62,6 +62,9 @@ open class UpdatesService(protected var context: Context) : InternalModule, Upda
   override val localAssetFiles: Map<AssetEntity, String>?
     get() = UpdatesController.instance.localAssetFiles
 
+  override val recentInvalidUpdate: UpdateEntity?
+    get() = UpdatesController.instance.recentInvalidUpdate
+
   override fun relaunchReactApplication(callback: LauncherCallback) {
     UpdatesController.instance.relaunchReactApplication(context, callback)
   }

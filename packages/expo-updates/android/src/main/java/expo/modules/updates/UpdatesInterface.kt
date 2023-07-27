@@ -12,6 +12,7 @@ import java.io.File
 // this unused import must stay because of versioning
 /* ktlint-disable no-unused-imports */
 import expo.modules.updates.UpdatesConfiguration
+
 /* ktlint-enable no-unused-imports */
 
 /**
@@ -33,6 +34,8 @@ interface UpdatesInterface {
   val embeddedUpdate: UpdateEntity?
   val launchedUpdate: UpdateEntity?
   val localAssetFiles: Map<AssetEntity, String>?
+
+  val recentInvalidUpdate: UpdateEntity?
 
   fun relaunchReactApplication(callback: LauncherCallback)
   fun resetSelectionPolicy()

@@ -243,7 +243,19 @@ class UpdatesModule(
                   updateResponse.responseHeaderData?.manifestFilters
                 )
               ) {
-                promise.resolveWithCheckForUpdateAsyncResult(CheckForUpdateAsyncResult.UpdateAvailable(updateManifest), updatesServiceLocal)
+                if (updatesServiceLocal.recentInvalidUpdate == null ||
+                  (
+                    updatesServiceLocal.selectionPolicy.shouldLoadNewUpdate(
+                        updateManifest.updateEntity,
+                        updatesServiceLocal.recentInvalidUpdate,
+                        updateResponse.responseHeaderData?.manifestFilters
+                      )
+                    )
+                ) {
+                  promise.resolveWithCheckForUpdateAsyncResult(CheckForUpdateAsyncResult.UpdateAvailable(updateManifest), updatesServiceLocal)
+                } else {
+                  promise.resolveWithCheckForUpdateAsyncResult(CheckForUpdateAsyncResult.NoUpdateAvailable(), updatesServiceLocal)
+                }
               } else {
                 promise.resolveWithCheckForUpdateAsyncResult(CheckForUpdateAsyncResult.NoUpdateAvailable(), updatesServiceLocal)
               }

@@ -198,6 +198,8 @@ class UpdatesController private constructor(
   val selectionPolicy: SelectionPolicy
     get() = mSelectionPolicy ?: defaultSelectionPolicy
 
+  var recentInvalidUpdate: UpdateEntity? = null
+
   // Internal Setters
 
   /**
@@ -290,6 +292,9 @@ class UpdatesController private constructor(
             is LoaderTask.RemoteCheckResult.NoUpdateAvailable -> UpdatesStateEvent.CheckCompleteUnavailable()
             is LoaderTask.RemoteCheckResult.UpdateAvailable -> UpdatesStateEvent.CheckCompleteWithUpdate(result.manifest)
             is LoaderTask.RemoteCheckResult.RollBackToEmbedded -> UpdatesStateEvent.CheckCompleteWithRollback(result.commitTime)
+          }
+          if (result is LoaderTask.RemoteCheckResult.NoUpdateAvailable && result.invalidLaunchedUpdate != null) {
+            recentInvalidUpdate = result.invalidLaunchedUpdate
           }
           stateMachine.processEvent(event)
         }
