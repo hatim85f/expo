@@ -1,11 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-import * as Log from '../log';
-import { createTemplateHtmlFromExpoConfigAsync } from '../start/server/webTemplate';
-import { copyAsync, ensureDirectoryAsync } from '../utils/dir';
-import { env } from '../utils/env';
-import { setNodeEnv } from '../utils/nodeEnv';
 import { createBundlesAsync } from './createBundles';
 import { exportAssetsAsync, exportCssAssetsAsync } from './exportAssets';
 import { unstable_exportStaticAsync } from './exportStaticAsync';
@@ -21,6 +16,11 @@ import {
   writeMetadataJsonAsync,
   writeSourceMapsAsync,
 } from './writeContents';
+import * as Log from '../log';
+import { createTemplateHtmlFromExpoConfigAsync } from '../start/server/webTemplate';
+import { copyAsync, ensureDirectoryAsync } from '../utils/dir';
+import { env } from '../utils/env';
+import { setNodeEnv } from '../utils/nodeEnv';
 
 /**
  * The structure of the outputDir will be:
