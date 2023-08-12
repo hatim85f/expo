@@ -229,6 +229,164 @@ describe('server', () => {
     120 * 1000
   );
 
+  it(
+    'exports with an asset prefix',
+    async () => {
+      const projectRoot = await setupTestProjectAsync('basic-export', 'with-assets');
+      // `npx expo export`
+      await execa('node', [bin, 'export', '--dump-sourcemap', '--dump-assetmap'], {
+        cwd: projectRoot,
+        env: {
+          _EXPO_ASSET_PREFIX: '/foobar',
+        },
+      });
+
+      const outputDir = path.join(projectRoot, 'dist');
+      // List output files with sizes for snapshotting.
+      // This is to make sure that any changes to the output are intentional.
+      // Posix path formatting is used to make paths the same across OSes.
+      const files = klawSync(outputDir)
+        .map((entry) => {
+          if (entry.path.includes('node_modules') || !entry.stats.isFile()) {
+            return null;
+          }
+          return path.posix.relative(outputDir, entry.path);
+        })
+        .filter(Boolean);
+
+      const metadata = await JsonFile.readAsync(path.resolve(outputDir, 'metadata.json'));
+
+      expect(metadata).toEqual({
+        bundler: 'metro',
+        fileMetadata: {
+          android: {
+            assets: [
+              {
+                ext: 'png',
+                path: 'assets/fb960eb5e4eb49ec8786c7f6c4a57ce2',
+              },
+              {
+                ext: 'png',
+                path: 'assets/9ce7db807e4147e00df372d053c154c2',
+              },
+              {
+                ext: 'ttf',
+                path: 'assets/3858f62230ac3c915f300c664312c63f',
+              },
+            ],
+            bundle: expect.stringMatching(/bundles\/android-.*\.hbc/),
+          },
+          ios: {
+            assets: [
+              {
+                ext: 'png',
+                path: 'assets/fb960eb5e4eb49ec8786c7f6c4a57ce2',
+              },
+              {
+                ext: 'png',
+                path: 'assets/9ce7db807e4147e00df372d053c154c2',
+              },
+              {
+                ext: 'ttf',
+                path: 'assets/2f334f6c7ca5b2a504bdf8acdee104f3',
+              },
+            ],
+            bundle: expect.stringMatching(/bundles\/ios-.*\.hbc/),
+          },
+          web: {
+            assets: [
+              {
+                ext: 'png',
+                path: 'assets/fb960eb5e4eb49ec8786c7f6c4a57ce2',
+              },
+              {
+                ext: 'png',
+                path: 'assets/9ce7db807e4147e00df372d053c154c2',
+              },
+              {
+                ext: 'ttf',
+                path: 'assets/3858f62230ac3c915f300c664312c63f',
+              },
+            ],
+            bundle: expect.stringMatching(/bundles\/web-.*\.js/),
+          },
+        },
+        version: 0,
+      });
+
+      const assetmap = await JsonFile.readAsync(path.resolve(outputDir, 'assetmap.json'));
+      expect(assetmap).toEqual({
+        '2f334f6c7ca5b2a504bdf8acdee104f3': {
+          __packager_asset: true,
+          fileHashes: ['2f334f6c7ca5b2a504bdf8acdee104f3'],
+          fileSystemLocation: expect.stringMatching(/\/.*\/basic-export\/assets/),
+          files: [expect.stringMatching(/\/.*\/basic-export\/assets\/font\.ios\.ttf/)],
+          hash: '2f334f6c7ca5b2a504bdf8acdee104f3',
+          httpServerLocation: '/assets/assets',
+          name: 'font',
+          scales: [1],
+          type: 'ttf',
+        },
+
+        '3858f62230ac3c915f300c664312c63f': {
+          __packager_asset: true,
+          fileHashes: ['3858f62230ac3c915f300c664312c63f'],
+          fileSystemLocation: expect.stringMatching(/\/.*\/basic-export\/assets/),
+          files: [expect.stringMatching(/\/.*\/basic-export\/assets\/font\.ttf/)],
+          hash: '3858f62230ac3c915f300c664312c63f',
+          httpServerLocation: '/assets/assets',
+          name: 'font',
+          scales: [1],
+          type: 'ttf',
+        },
+        d48d481475a80809fcf9253a765193d1: {
+          __packager_asset: true,
+          fileHashes: ['fb960eb5e4eb49ec8786c7f6c4a57ce2', '9ce7db807e4147e00df372d053c154c2'],
+          fileSystemLocation: expect.stringMatching(/\/.*\/basic-export\/assets/),
+          files: [
+            expect.stringMatching(/\/.*\/basic-export\/assets\/icon\.png/),
+            expect.stringMatching(/\/.*\/basic-export\/assets\/icon@2x\.png/),
+          ],
+          hash: 'd48d481475a80809fcf9253a765193d1',
+          height: 1,
+          httpServerLocation: '/assets/assets',
+          name: 'icon',
+          scales: [1, 2],
+          type: 'png',
+          width: 1,
+        },
+      });
+
+      // If this changes then everything else probably changed as well.
+      expect(files).toEqual([
+        'assetmap.json',
+        'assets/2f334f6c7ca5b2a504bdf8acdee104f3',
+        'assets/3858f62230ac3c915f300c664312c63f',
+        'assets/9ce7db807e4147e00df372d053c154c2',
+        'assets/assets/font.ttf',
+        'assets/assets/icon.png',
+        'assets/assets/icon@2x.png',
+
+        'assets/fb960eb5e4eb49ec8786c7f6c4a57ce2',
+        expect.stringMatching(/bundles\/android-[\w\d]+\.hbc/),
+        expect.stringMatching(/bundles\/android-[\w\d]+\.map/),
+        expect.stringMatching(/bundles\/ios-[\w\d]+\.hbc/),
+        expect.stringMatching(/bundles\/ios-[\w\d]+\.map/),
+        expect.stringMatching(/bundles\/web-[\w\d]+\.js/),
+        expect.stringMatching(/bundles\/web-[\w\d]+\.map/),
+        'debug.html',
+        'drawable-mdpi/assets_icon.png',
+        'drawable-xhdpi/assets_icon.png',
+        'favicon.ico',
+        'index.html',
+        'metadata.json',
+        'raw/assets_font.ttf',
+      ]);
+    },
+    // Could take 45s depending on how fast npm installs
+    120 * 1000
+  );
+
   xit(
     'runs `npx expo export -p web` for static rendering',
     async () => {

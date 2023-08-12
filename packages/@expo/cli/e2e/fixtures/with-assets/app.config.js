@@ -1,6 +1,7 @@
 /** @type {import('expo/config').ExpoConfig} */
 module.exports = {
   assetBundlePatterns: ['assets/*.ttf'],
+  assetPrefix: process.env._EXPO_ASSET_PREFIX || undefined,
   android: {
     package: 'com.example.minimal',
   },
