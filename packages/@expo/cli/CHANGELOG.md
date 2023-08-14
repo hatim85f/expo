@@ -7,6 +7,7 @@
 ### 🎉 New features
 
 - Add `assetPrefix` support for `npx expo export`. ([#23911](https://github.com/expo/expo/pull/23911) by [@EvanBacon](https://github.com/EvanBacon))
+- Forward exact Metro server error during static rendering. ([#23909](https://github.com/expo/expo/pull/23909) by [@EvanBacon](https://github.com/EvanBacon))
 
 ### 🐛 Bug fixes
 
