@@ -105,7 +105,11 @@ export async function exportAppAsync(
   }
 
   // Write the JS bundles to disk, and get the bundle file names (this could change with async chunk loading support).
-  const { hashes, fileNames } = await writeBundlesAsync({ bundles, outputDir: bundlesPath });
+  const { hashes, fileNames } = await writeBundlesAsync({
+    bundles,
+    useWebSSG,
+    outputDir: bundlesPath,
+  });
 
   Log.log('Finished saving JS Bundles');
 
@@ -141,6 +145,7 @@ export async function exportAppAsync(
       await fs.promises.writeFile(path.join(staticFolder, 'index.html'), html);
     }
 
+    // TODO: Use a different mechanism for static web.
     if (bundles.web) {
       // Save assets like a typical bundler, preserving the file paths on web.
       // TODO: Update React Native Web to support loading files from asset hashes.
@@ -152,38 +157,41 @@ export async function exportAppAsync(
     }
   }
 
-  const { assets } = await exportAssetsAsync(projectRoot, {
-    exp,
-    outputDir: staticFolder,
-    bundles,
-  });
-
-  if (dumpAssetmap) {
-    Log.log('Dumping asset map');
-    await writeAssetMapAsync({ outputDir: staticFolder, assets });
-  }
-
-  // build source maps
-  if (dumpSourcemap) {
-    Log.log('Dumping source maps');
-    await writeSourceMapsAsync({
-      bundles,
-      hashes,
-      outputDir: bundlesPath,
-      fileNames,
-    });
-
-    Log.log('Preparing additional debugging files');
-    // If we output source maps, then add a debug HTML file which the user can open in
-    // the web browser to inspect the output like web.
-    await writeDebugHtmlAsync({
+  // Can be empty during web-only SSG.
+  // TODO: Use same asset system across platforms again.
+  if (!!Object.keys(fileNames).length) {
+    const { assets } = await exportAssetsAsync(projectRoot, {
+      exp,
       outputDir: staticFolder,
-      fileNames,
+      bundles,
     });
-  }
 
-  // Generate a `metadata.json` and the export is complete.
-  await writeMetadataJsonAsync({ outputDir: staticFolder, bundles, fileNames });
+    if (dumpAssetmap) {
+      Log.log('Dumping asset map');
+      await writeAssetMapAsync({ outputDir: staticFolder, assets });
+    }
+    // build source maps
+    if (dumpSourcemap) {
+      Log.log('Dumping source maps');
+      await writeSourceMapsAsync({
+        bundles,
+        hashes,
+        outputDir: bundlesPath,
+        fileNames,
+      });
+
+      Log.log('Preparing additional debugging files');
+      // If we output source maps, then add a debug HTML file which the user can open in
+      // the web browser to inspect the output like web.
+      await writeDebugHtmlAsync({
+        outputDir: staticFolder,
+        fileNames,
+      });
+    }
+
+    // Generate a `metadata.json` and the export is complete.
+    await writeMetadataJsonAsync({ outputDir: staticFolder, bundles, fileNames });
+  }
 }
 
 /**

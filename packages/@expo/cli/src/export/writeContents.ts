@@ -38,8 +38,10 @@ function createBundleHash(bundle: string | Uint8Array): string {
 export async function writeBundlesAsync({
   bundles,
   outputDir,
+  useWebSSG,
 }: {
   bundles: Partial<Record<Platform, Pick<BundleOutput, 'hermesBytecodeBundle' | 'code'>>>;
+  useWebSSG?: boolean;
   outputDir: string;
 }) {
   const hashes: Partial<Record<Platform, string>> = {};
@@ -49,6 +51,9 @@ export async function writeBundlesAsync({
     Platform,
     Pick<BundleOutput, 'hermesBytecodeBundle' | 'code'>,
   ][]) {
+    if (platform === 'web' && useWebSSG) {
+      continue;
+    }
     const bundle = bundleOutput.hermesBytecodeBundle ?? bundleOutput.code;
     const hash = createBundleHash(bundle);
     const fileName = createBundleFileName({
