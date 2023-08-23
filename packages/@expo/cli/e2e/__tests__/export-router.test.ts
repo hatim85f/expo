@@ -60,7 +60,7 @@ afterAll(() => {
 
 beforeEach(() => ensurePortFreeAsync(19000));
 
-xdescribe('static-rendering', () => {
+describe('static-rendering', () => {
   const projectRoot = ensureTesterReady('static-rendering');
   const outputDir = path.join(projectRoot, 'dist-static-rendering');
 
@@ -347,20 +347,20 @@ describe('static-rendering with asset prefix', () => {
 
   beforeAll(
     async () => {
-      // await execa(
-      //   'node',
-      //   [bin, 'export', '-p', 'web', '--output-dir', 'dist-static-rendering-asset-prefix'],
-      //   {
-      //     cwd: projectRoot,
-      //     env: {
-      //       NODE_ENV: 'production',
-      //       _EXPO_ASSET_PREFIX: '/one/two',
-      //       EXPO_USE_STATIC: '1',
-      //       E2E_ROUTER_SRC: 'static-rendering',
-      //       E2E_ROUTER_ASYNC: 'development',
-      //     },
-      //   }
-      // );
+      await execa(
+        'node',
+        [bin, 'export', '-p', 'web', '--output-dir', 'dist-static-rendering-asset-prefix'],
+        {
+          cwd: projectRoot,
+          env: {
+            NODE_ENV: 'production',
+            _EXPO_ASSET_PREFIX: '/one/two',
+            EXPO_USE_STATIC: '1',
+            E2E_ROUTER_SRC: 'static-rendering',
+            E2E_ROUTER_ASYNC: 'development',
+          },
+        }
+      );
     },
     // Could take 45s depending on how fast the bundler resolves
     560 * 1000
@@ -828,7 +828,7 @@ xdescribe('single-page', () => {
   );
 });
 
-xdescribe('url-polyfill', () => {
+describe('url-polyfill', () => {
   const projectRoot = ensureTesterReady('url-polyfill');
   const outputDir = path.join(projectRoot, 'dist-url-polyfill');
 
