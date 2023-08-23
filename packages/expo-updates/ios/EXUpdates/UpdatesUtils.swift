@@ -135,6 +135,14 @@ public final class UpdatesUtils: NSObject {
           withLaunchedUpdate: launchedUpdate,
           filters: manifestFilters
         ) {
+          constants.database.databaseQueue.sync {
+            do {
+              let storedUpdate = try constants.database.update(withId: update.updateId, config: constants.config)
+              if let storedUpdate = storedUpdate {
+                AppController.sharedInstance.logger.info(message: "Found stored update for ID = \(update.updateId), failureCount = \(storedUpdate.failedLaunchCount)")
+              }
+            } catch {}
+          }
           block([
             "manifest": update.manifest.rawManifestJSON()
           ])
