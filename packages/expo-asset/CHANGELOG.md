@@ -4,6 +4,8 @@
 
 ### 🛠 Breaking changes
 
+- Convert `../` to `_` for the property `httpServerLocation` in `hashAssetFiles` (Metro asset pre-processor) to support assets in monorepos the same everywhere.
+
 ### 🎉 New features
 
 ### 🐛 Bug fixes
