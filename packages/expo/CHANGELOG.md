@@ -4,7 +4,7 @@
 
 ### 🛠 Breaking changes
 
-- Drop legacy `hashAssetFiles` (SDK 32) in favor of `expo-assets` version.
+- Drop legacy `hashAssetFiles` (SDK 32) in favor of `expo-assets` version. ([#24090](https://github.com/expo/expo/pull/24090) by [@EvanBacon](https://github.com/EvanBacon))
 
 ### 🎉 New features
 
