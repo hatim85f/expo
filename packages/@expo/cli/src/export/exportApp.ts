@@ -159,7 +159,7 @@ export async function exportAppAsync(
 
   // Can be empty during web-only SSG.
   // TODO: Use same asset system across platforms again.
-  if (!!Object.keys(fileNames).length) {
+  if (Object.keys(fileNames).length) {
     const { assets } = await exportAssetsAsync(projectRoot, {
       exp,
       outputDir: staticFolder,
