@@ -2234,8 +2234,6 @@ PODS:
     - React-Core
   - EXNotifications (0.22.0):
     - ExpoModulesCore
-  - EXPermissions (14.3.0):
-    - ExpoModulesCore
   - Expo (50.0.0-alpha.1):
     - ExpoModulesCore
   - ExpoAppleAuthentication (6.1.1):
@@ -3470,7 +3468,6 @@ DEPENDENCIES:
   - EXManifests/Tests (from `../packages/expo-manifests/ios`)
   - EXMediaLibrary (from `../packages/expo-media-library/ios`)
   - EXNotifications (from `../packages/expo-notifications/ios`)
-  - EXPermissions (from `../packages/expo-permissions/ios`)
   - Expo (from `../packages/expo`)
   - ExpoAppleAuthentication (from `../packages/expo-apple-authentication/ios`)
   - ExpoBattery (from `../packages/expo-battery/ios`)
@@ -4351,8 +4348,6 @@ EXTERNAL SOURCES:
     :path: "../packages/expo-media-library/ios"
   EXNotifications:
     :path: "../packages/expo-notifications/ios"
-  EXPermissions:
-    :path: "../packages/expo-permissions/ios"
   Expo:
     :path: "../packages/expo"
   ExpoAppleAuthentication:
@@ -4923,7 +4918,6 @@ SPEC CHECKSUMS:
   EXManifests: a9e5206b6b1a6016eea8ddd5c379cf97f7ec89f0
   EXMediaLibrary: a36aabb512754f404aa903b440314b0c86ffe4e7
   EXNotifications: f69f7ffd5223e7411476d6c65233ba06b26dba6d
-  EXPermissions: f7d79d0fbbd125e6a402fa77119d2a152e54d318
   Expo: 10254ab447c31ce6c1973240451be7f4a09955fc
   ExpoAppleAuthentication: dfa28c11b04bc143875b77b90b47dd9ff0571426
   ExpoBattery: cdf132b55833403fa3f7afea97e8834c69721933
