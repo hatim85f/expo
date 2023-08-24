@@ -16,6 +16,12 @@ To use [drawer navigator](https://reactnavigation.org/docs/drawer-based-navigati
   ]}
 />
 
+<Terminal
+  cmd={[
+    '$ npm install -D @babel/plugin-transform-export-namespace-from',
+  ]}
+/>
+
 Next, you'll need to update your **babel.config.js** to include the reanimated plugin:
 
 {/* prettier-ignore */}
@@ -27,6 +33,7 @@ module.exports = {
     plugins: [
       /* @hide ... */ /* @end */
       'react-native-reanimated/plugin',
+'@babel/plugin-transform-export-namespace-from'
     ],
 };
 ```
