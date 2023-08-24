@@ -14,7 +14,6 @@ module.exports = function hashAssetFiles(asset) {
         .match(/\?export_path=(.*)/)[1]
         .replace(/\.\.\//g, '_');
     }
-    // asset.httpServerLocation = asset.httpServerLocation.replace(/\.\.\//g, '_');
 
     return asset;
   });
