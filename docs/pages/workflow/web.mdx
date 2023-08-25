@@ -25,9 +25,9 @@ Modify the entry file to use [`registerRootComponent`](/versions/latest/sdk/regi
 ```diff
 + import {registerRootComponent} from 'expo';
 
-import App from './App';
+import App from '../../App';
 - import {AppRegistry} from 'react-native';
-- import {name as appName} from './app.json';
+- import {name as appName} from '../../app.json';
 
 - AppRegistry.registerComponent(appName, () => App);
 + registerRootComponent(App);
